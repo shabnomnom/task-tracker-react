@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
 import Button from './Button'
 
-const Header = ({title}) => { // destructured object for props instead of props 
-  const onClick = () => {
-    console.log('Click')
-  }
+const Header = ({title, onAdd, showAdd}) => { // destructured object for props instead of props 
+  
   return (
     <header className='header'> 
       <h1> {title}</h1>
-      <Button color='green' text='Add' onClick={onClick}></Button>  
+      <Button 
+        color={showAdd ? 'red': 'green'}
+        text={showAdd ? 'Close': 'Add'} 
+        onClick={onAdd}></Button>  
     </header>
   )
 }

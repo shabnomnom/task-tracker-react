@@ -1,8 +1,11 @@
 import Header from './components/Header'
 import Tasks from './components/Tasks'
+import AddTask from './components/AddTask'
+
 import {useState} from 'react' //hook
 
 const App = () => {
+  const [showAddTask, setShowAddTask] = useState(false)
   const [tasks, setTasks] =  useState( 
     [
       {
@@ -20,16 +23,38 @@ const App = () => {
     ]
   )
 
-  // delete task 
+  // Add Task 
+  const addTask = (task) => {
+    const id = Math.floor(Math.random() * 1000)+1 // Math.random() * (max - min) + min;
+    
+    const newTask = {id, ...task} //pass the task to the object
+    setTasks([...tasks, newTask])
+  }
+
+  // Delete task 
   const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id))
   }
+  // Toggle reminder 
+  const toggleReminder = (id) => {
+    setTasks(
+      tasks.map((task) => task.id === id ?{
+      ...task, reminder: !task.reminder} : task
+      )
+    )
+  }
   return (
     <div className='container'>
-      <Header/>
-      {tasks.length > 0 ?<Tasks tasks={tasks} onDelete={deleteTask}/>
+    <Header onAdd={() => setShowAddTask(!showAddTask)} 
+    showAdd = {showAddTask}/>
+    {showAddTask && <AddTask onAdd={addTask}/>}
+    {tasks.length > 0 ?
+      <Tasks tasks={tasks} 
+      onDelete={deleteTask} 
+      onToggle={toggleReminder}/>
       : 'There is no more tasks' }
-    </div>       
+    </div> 
+          
   );
 }
 
